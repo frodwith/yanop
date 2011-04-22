@@ -1,4 +1,7 @@
 exports[t] = t.toUpperCase() for t in ['flag', 'scalar', 'array', 'object']
+exports.list = exports.array
+exports.hash = exports.object
+exports.bool = exports.flag
 
 exports.BaseError         = class BaseError extends Error
     constructor: (@desc) ->
@@ -28,19 +31,12 @@ exports.UnknownOption     = class UnknownOption extends ParseError
 exports.NoValue           = class NoValue extends ParseError
     describe: () -> @desc + " requires a value, but none was given"
 
-exports.FlagWithValue     = class FlagWithArguments extends ParseError
+exports.FlagWithValue     = class FlagWithValue extends ParseError
     describe: () ->
         "#{ @desc.name } was given \"#{ @desc.value }\", but takes no arguments"
 
 exports.ScalarWithValues  = class ScalarWithValues extends ParseError
     describe: () -> @desc + " was given more than one value"
-
-exports.ObjectNotPair     = class ObjectNotPair extends ParseError
-    describe: () ->
-        @desc.name + " expects a key=value pair, but got " + @desc.value
-
-exports.ObjectKeyRepeated = class ObjectKeyRepeated extends ParseError
-    describe: () -> "#{ @desc.name }.#{ @desc.key } given more than once"
 
 exports.RequiredMissing   = class RequiredMissing extends ParseError
     describe: () -> "Required option #{ @desc } was missing"
@@ -60,10 +56,13 @@ class Result
 
     # Mark a param (scalar, array, or object) by name with value.
     param: (name, value) ->
+        throw new NoValue name unless value
+
         p      = @parser
         target = p.index[name]
         throw new UnknownOption name unless target
         spec   = p.spec[target]
+
         switch spec.type
             when exports.flag
                 throw new FlagWithValue name: name, value: value
@@ -75,14 +74,9 @@ class Result
                 o = this[target] or= []
                 o.push value
             when exports.object
-                pair = value.split '='
-                unless pair.length is 2
-                    throw new ObjectNotPair name: name, value: value
+                match = /^([^=]*)(?:=(.+))?$/.exec(value)
                 o = this[target] or= {}
-                [k,v] = pair
-                if o[k]
-                    throw new ObjectKeyRepeated name: name, key: k
-                o[k] = v
+                o[match[1]] = match[2]
             else
                 throw new UnvalidatedType(name)
 
@@ -90,9 +84,10 @@ class Result
     finalize: () ->
         p = @parser
         for own target, spec of p.spec
-            if (spec.type isnt exports.flag) and this[target]?
+            if (spec.type isnt exports.flag) and not this[target]
                 this[target] = spec.default
 
+            value = this[target]
             if spec.required and (
                 (spec.type is exports.scalar and not value) or
                 (spec.type is exports.array  and value.length < 1)
@@ -109,19 +104,19 @@ exports.Parser = class Parser
 
             # upgrade scalars to arrays
             longs = subspec.long or [target]
-            longs = [longs] unless longs.length?
+            longs = [longs] unless Array.isArray longs
             subspec.long = longs
 
             shorts = subspec.short or []
-            shorts = [shorts] unless shorts.length?
+            shorts = [shorts] unless Array.isArray shorts
             subspec.short = shorts
 
-            alias = longs.slice(0)
+            alias = ('--' + l for l in longs)
 
             for s in shorts
                 if s.length isnt 1
                     throw new InvalidShort(s)
-                alias.push s
+                alias.push '-' + s
 
             for a in alias
                 existing = @index[a]
@@ -132,9 +127,9 @@ exports.Parser = class Parser
             throw new NoType(target) unless t
 
             if t is exports.array
-                spec.default or= []
+                subspec.default or= []
             else if t is exports.object
-                spec.default or= {}
+                subspec.default or= {}
             else if t isnt exports.scalar and t isnt exports.flag
                 throw new UnknownType name: target, type: t
 
@@ -159,17 +154,26 @@ exports.Parser = class Parser
                 result.arg(a) for a in argv.slice(i+1)
                 break
 
-            # -vax is equivalent to -v -a -x
-            else if match = /^-(\w\w+)$/.exec(blob)
-                result.flag(f) for f in match[1].split()
+            # -vax is equivalent to -v -a -x if -v is a flag
+            # -Dfoo is equivalent to -D=foo if -D isn't a flag
+            else if match = /^-(\w.+)$/.exec(blob)
+                name   = match[1]
+                first  = '-' + name.charAt(0)
 
-            # -a=42 or --answer=42 or even -answer=42 (DWIM a bit)
-            else if match = /^--?(\w+)=(.*)$/.exec(blob)
-                result.param(match[1], match[2])
+                if @isFlag first
+                    result.flag('-' + f) for f in name.split('')
+                else
+                    result.param first, name.slice(1)
+
+            # --answer=42 but NOT -answer=42. That will be parsed by
+            # the above rule as -a nswer=42. We're also not supporting -a=42,
+            # since that's not standard at all. That will be parsed as -a =42
+            else if match = /^(--\w+)=(.*)$/.exec(blob)
+                result.param match[1], match[2]
 
             # -v or --verbose
-            else if match = /^-(\w)$/.exec(blob) or
-                            /^--(\w+)$/.exec(blob)
+            else if match = /^(-\w)$/.exec(blob) or
+                            /^(--\w+)$/.exec(blob)
                 name = match[1]
                 if @isFlag name
                     result.flag name

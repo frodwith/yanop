@@ -8,7 +8,7 @@ coffee: $(JSFILES)
 all: coffee
 
 test: coffee
-	nodeunit test
+	nodeunit test/*.js
 
 clean:
 	rm $(JSFILES)
