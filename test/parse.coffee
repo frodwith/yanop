@@ -1,4 +1,4 @@
-getopt = require('getopt')
+getopt = require '../lib/getopt'
 
 exports.flag = (t) ->
     t.expect 6

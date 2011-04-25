@@ -1,0 +1,30 @@
+{
+    "name" : "getopt",
+    "description" : "fixme",
+    "version" : "0.1.0",
+    "bugs" : "mailto:frodwith@gmail.com",
+    "keywords" : [ "option", "parse", "commandline", "command", "line" ],
+    "main" : "./lib/getopt.js",
+    "directories" : {
+        "lib" : "./lib",
+        "test" : "./test"
+    },
+    "maintainers" : [
+        { name: "Paul Drvier", email: "frodwith@gmail.com" }
+    ],
+    "contributors" : [
+        { name: "Paul Drvier", email: "frodwith@gmail.com" }
+    ],
+    "licences" : [
+        {
+            "type" : "MIT License",
+            "url"  : "http://www.opensource.org/licenses/mit-license"
+        }
+    ],
+    "repositories" : [
+        {
+            "type" : "git",
+            "url" : "http://github.com/frodwith/node-getopt"
+        }
+    ]
+}
