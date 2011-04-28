@@ -178,10 +178,11 @@ exports.long = (t) ->
 
 
 exports['aliased types'] = (t) ->
-    t.expect 3
+    t.expect 4
     t.equal(getopt.list, getopt.array)
     t.equal(getopt.hash, getopt.object)
     t.equal(getopt.bool, getopt.flag)
+    t.equal(getopt.string, getopt.scalar)
     t.done()
 
 exports.complicated = (t) ->

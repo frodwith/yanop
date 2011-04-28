@@ -10,10 +10,10 @@
         "test" : "./test"
     },
     "maintainers" : [
-        { name: "Paul Drvier", email: "frodwith@gmail.com" }
+        { "name": "Paul Driver", "email": "frodwith@gmail.com" }
     ],
     "contributors" : [
-        { name: "Paul Drvier", email: "frodwith@gmail.com" }
+        { "name": "Paul Drvier", "email": "frodwith@gmail.com" }
     ],
     "licences" : [
         {

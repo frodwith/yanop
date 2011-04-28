@@ -11,6 +11,6 @@ test: coffee
 	nodeunit test/*.js
 
 clean:
-	rm $(JSFILES)
+	rm -f $(JSFILES)
 
 .PHONY : all test coffee

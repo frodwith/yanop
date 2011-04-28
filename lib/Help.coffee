@@ -32,32 +32,39 @@ exports.Help = class Help
             left.push leftCol(sub, s, true) for s in sub.long.slice(0).sort()
 
             line.left  = left
-            line.fl    = left[0]
-            line.ll    = left[left.length-1]
-            line.right = sub.description.trim()
-            line.right += '.' unless line.right.match(/\.$/)
-            line.right += ' Required.' if sub.required
+            line.first = left[0]
+            line.last  = left[left.length-1]
+
+            right = []
+            if desc = sub.description.trim().replace(/\.$/, '')
+                right.push desc
+
+            right.push 'Required' if sub.required
+            if sub.type is type.array or sub.type is type.object
+                right.push 'Can be specified multiple times'
 
             if sub.default
-                line.right += ' Default: ' + JSON.stringify(sub.default)
+                right.push 'Default: ' + JSON.stringify(sub.default)
+
+            line.right = right.join('. ')
+            line.right += '.' if right.length
 
             lines.push line
 
         # Right-justify the left sides
-        lengths = (l.ll.length for l in lines)
+        lengths = (l.last.length for l in lines)
         max     = Math.max.apply(Math, lengths)
         for line in lines
             for l, i in line.left
                 pad = max - l.length
                 l = ' ' + l for [1..pad] if pad
-                line.left[i] = l + '  '
+                line.left[i] = l
+            line.left[line.left.length-1] += '  '
 
-        # Left-justify the right sides two spaces away
-
+        # Left-justify the right sides two spaces away, wrapped to tw
         remaining = @tw - max - 2
         sep = "\n"
         sep += ' ' for [1..max+2]
-
 
         for l, i in lines
             words = (w.trim() for w in l.right.split /\s/)
@@ -73,7 +80,10 @@ exports.Help = class Help
                     cur = w
             lines[i].right = all + cur
 
-        lines.sort (a, b) -> (a.rank - b.rank) or a.fl.localeCompare(b.fl)
-        out = (l.left.join("\n") + l.right for l in lines).join "\n\n"
-        console.log out
-        out
+        # Flags first, then scalars, etc -- sorted by beginning of line in
+        # lex order. This is as much so that we can have a canonical order to
+        # test as anything.
+        lines.sort (a, b) ->
+            (a.rank - b.rank) or a.first.localeCompare(b.first)
+
+        (l.left.join("\n") + l.right for l in lines).join "\n\n"
