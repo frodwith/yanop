@@ -2,7 +2,6 @@
 	coffee -cs < $< > $@
 
 JSFILES := $(shell find . -name '*.coffee' | sed s/\.coffee$$/.js/)
-
 coffee: $(JSFILES)
 
 all: coffee
@@ -13,4 +12,7 @@ test: coffee
 clean:
 	rm -f $(JSFILES)
 
-.PHONY : all test coffee
+dist:
+	perl mkdist.pl
+
+.PHONY : all test coffee dist

@@ -1,8 +1,8 @@
 {
     "name" : "getopt",
-    "description" : "fixme",
+    "description" : "Powerful, flexible command-line option parsing for NodeJS",
     "version" : "0.1.0",
-    "bugs" : "mailto:frodwith@gmail.com",
+    "bugs" : "https://github.com/frodwith/node-getopt/issues",
     "keywords" : [ "option", "parse", "commandline", "command", "line" ],
     "main" : "./lib/getopt.js",
     "directories" : {
