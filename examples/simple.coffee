@@ -1,12 +1,12 @@
-getopt = require 'getopt'
+yanop = require 'yanop'
 sys    = require 'sys'
 
-o = getopt.simple
+o = yanop.simple
     munge:
-        type: getopt.flag
+        type: yanop.flag
         description: 'Whether or not to munge'
     ickiness:
-        type: getopt.scalar
+        type: yanop.scalar
         default: 1
         description: 'How icky to make the munging'
 

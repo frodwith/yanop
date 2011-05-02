@@ -4,7 +4,7 @@ exports.BaseError         = class BaseError extends Error
         @message = @describe()
 
     toString: () ->
-        'getopt.' + @constructor.name + ': ' + @describe()
+        'yanop.' + @constructor.name + ': ' + @describe()
 
     describe: () ->
         JSON.stringify(@desc)

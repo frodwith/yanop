@@ -25,5 +25,5 @@ my $version = do {
 
 my $tar = Archive::Tar->new;
 $tar->add_files(@MANIFEST);
-my $name = "node-getopt-$version";
+my $name = "yanop-$version";
 $tar->write("$name.tar.gz", COMPRESS_GZIP, $name);

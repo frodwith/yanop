@@ -1,10 +1,10 @@
 {
-    "name" : "getopt",
-    "description" : "Powerful, flexible command-line option parsing for NodeJS",
+    "name" : "yanop",
+    "description" : "Yet Another Node Option Parser",
     "version" : "0.1.0",
-    "bugs" : "https://github.com/frodwith/node-getopt/issues",
+    "bugs" : "https://github.com/frodwith/yanop/issues",
     "keywords" : [ "option", "parse", "commandline", "command", "line" ],
-    "main" : "./lib/getopt.js",
+    "main" : "./lib/yanop.js",
     "directories" : {
         "lib" : "./lib",
         "test" : "./test"
@@ -24,7 +24,7 @@
     "repositories" : [
         {
             "type" : "git",
-            "url" : "http://github.com/frodwith/node-getopt"
+            "url" : "http://github.com/frodwith/yanop"
         }
     ]
 }

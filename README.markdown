@@ -1,22 +1,22 @@
-Getopt
+YANOP - Yet Another Node Option Parser
 ======
 
 For the impatient
 -----------------
 If you're in a hurry and you just want to parse your options already:
 
-    getopt = require('getopt');
-    options = getopt.simple({
+    yanop = require('yanop');
+    options = yanop.simple({
         verbose: {
-            type: getopt.flag,
+            type: yanop.flag,
             short: 'v',
         },
         input: {
-            type: getopt.list,
+            type: yanop.list,
             short: 'i',
         },
         output: {
-            type: getopt.scalar,
+            type: yanop.scalar,
             description: 'output file (- for stdout)',
             default: '-',
             short: 'o',
@@ -45,9 +45,9 @@ prints out:
           -o VAL
     --output=VAL  output file (- for stdout). Required. Default: -
 
-getopt.simple() doesn't do what I want!
+yanop.simple() doesn't do what I want!
 =======================================
-Yeah, sorry about that. getopt.simple() does what I usually want with a
+Yeah, sorry about that. yanop.simple() does what I usually want with a
 minimum of fuss and ceremony, but have a look at the lower level APIs. Very
 probably, you can coerce them into doing what you want, though you might have
 to write try/catch blocks (the horror!) and call process.exit() yourself, and
@@ -59,24 +59,24 @@ Why?
 
 As if Node didn't have enough option parsers. As of this writing, most of them
 are almost good enough for me. None of them quite measures up to the power of
-perl's Getopt::Long though. Getopt::Long's interface sucks, but its parser is
+perl's yanop::Long though. yanop::Long's interface sucks, but its parser is
 very flexible. This module aims to have an interface that doesn't suck and
 still be flexible, but you'll be the judge.
 
 Specification
 -------------
 
-The primary way you give information to getopt is through a specification
+The primary way you give information to yanop is through a specification
 object. The keys are the names of targets (keys in the result object), and the
 values are objects with the following keys:
 
 ### type
 
-This tells getopt what kind of thing you're trying to parse. It absolutely
+This tells yanop what kind of thing you're trying to parse. It absolutely
 must be one of the following - you cannot pass a string, and there is no
 default.
 
-#### getopt.flag (or getopt.bool) 
+#### yanop.flag (or yanop.bool)
 
 Just an "on" switch. It'll be true if it was passed, and false if it wasn't.
 All the following forms are valid:
@@ -85,18 +85,18 @@ All the following forms are valid:
     -v -a -x
     --verbose --anthropomorphic --xenophobic
 
-#### getopt.scalar (or getopt.string)
+#### yanop.scalar (or yanop.string)
 
 Expects one (and only one) value. If present at all, its value will be some
 kind of string. Passing more than one argument for options of this type will
-make getopt throw an error. The following forms are all valid:
+make yanop throw an error. The following forms are all valid:
 
     -a42
     -a 42
     --answer 42
     --answer=42
 
-#### getopt.array (or getopt.list)
+#### yanop.array (or yanop.list)
 
 Expects zero or more values. You'll get an array in the result object of all
 the strings passed for this argument.
@@ -105,14 +105,14 @@ the strings passed for this argument.
 ***
     { foo: ['one', 'two', 'three'] }
 
-#### getopt.object (or getopt.hash)
+#### yanop.object (or yanop.hash)
 
 This one is a little odd: like list, you can pass it multiple times, but the
 result will be an object (or hash) instead of an array, and the value will be
 split into key/value on the = sign. An example will probably explain better:
 
     define: {
-        type: getopt.object,
+        type: yanop.object,
         short: '-D'
     }
 ***
@@ -125,7 +125,7 @@ split into key/value on the = sign. An example will probably explain better:
 Either a string or an array of strings. All must be one character long (leave
 off the -). This creates short aliases for your argument. The target will be
 the same, though, and aliases can be mixed. In addition, for flag type shorts,
-they can be chained together.  No short aliases are created by default. 
+they can be chained together.  No short aliases are created by default.
 
 ### long
 
@@ -136,7 +136,7 @@ wish it to be a long alias.
 
 ### required
 
-A boolean. This causes getopt.parse to throw an exception if the argument
+A boolean. This causes yanop.parse to throw an exception if the argument
 wasn't given, and is only valid for scalars and lists. In the list case, at
 least one value must be given.
 
@@ -149,13 +149,13 @@ otherwise.
 ### description
 
 Purely optional, this should be a string explaining what your option does. The
-help generator makes use of this -- see getopt.help() for details.
+help generator makes use of this -- see yanop.help() for details.
 
 Positional Arguments
 --------------------
 Anything that doesn't look like an option will get aggregated into the result
 object's .argv property, in the order it was found in the actual argv.  '-' is
-treated as positional, and '--' will cause getopt to stop processing and
+treated as positional, and '--' will cause yanop to stop processing and
 report the rest of the args as positional.
 
 Unrecognized Arguments
@@ -166,33 +166,33 @@ will cause an error to be thrown.
 API
 ===
 
-### getopt.parse(spec, argv)
+### yanop.parse(spec, argv)
 
 Processes argv without modifying it and returns a result object, which will
 have an argv property and other properties depending on the option spec. Any
 errors in parsing will throw an exception. If you don't specify argv,
 process.argv (minus the first two elements) will be used.
 
-### getopt.tryParse(spec, argv)
+### yanop.tryParse(spec, argv)
 
-Wraps getopt.parse in a try/catch block. If exceptions are encountered, they
+Wraps yanop.parse in a try/catch block. If exceptions are encountered, they
 are printed to stderr and the process will exit with a non-zero code.
 
-### getopt.zero()
+### yanop.zero()
 
 Returns the program name (e.g. "node myscript.js"). Useful when generating a
 usage message.
 
-### getopt.usage()
+### yanop.usage()
 
-Uses getopt.zero() to generate a usage message of the form: 
+Uses yanop.zero() to generate a usage message of the form:
 "Usage: node myscript.js [OPTIONS]". This is the default message used by
-getopt.simple().
+yanop.simple().
 
-### getopt.help(spec)
+### yanop.help(spec)
 
 Returns a formatted string describing the options specified. Used internally
-by getopt.simple(), but you are encouraged to use it outside that context.
+by yanop.simple(), but you are encouraged to use it outside that context.
 
 The description field of the spec is examined. If you didn't include a period
 at the end of the description, one will be added. Other bits of explanatory
@@ -200,13 +200,13 @@ text (like "Required", "Default: " or "Can be specified multiple times") will
 be added to the end of the description to keep you from having to duplicate
 spec information in the description.
 
-### getopt.simple(spec, banner, argv)
+### yanop.simple(spec, banner, argv)
 
-Behaves similarly to getopt.tryParse(), except that it adds a "help" option
+Behaves similarly to yanop.tryParse(), except that it adds a "help" option
 and then checks for it. If --help is passed, spec will be passed to
-getopt.help() to generate some the help. The given banner will be printed,
+yanop.help() to generate some the help. The given banner will be printed,
 followed by this help. Banner and argv are both optional: banner defaults to
-getopt.usage(), and argv() defaults to process.argv as in getopt.parse().
+yanop.usage(), and argv() defaults to process.argv as in yanop.parse().
 
 Errors
 ======
@@ -218,18 +218,18 @@ useful to the user.
 Any time you create a Parser or Help object (internal classes used by the api
 methods above), an exception will be thrown if there is something inconsistent
 about your option specification. This helps you catch errors sooner. These
-exceptions are instances of getopt.SpecError, but you probably shouldn't try
-to catch them. getopt.tryParse et al will rethrow them.
+exceptions are instances of yanop.SpecError, but you probably shouldn't try
+to catch them. yanop.tryParse et al will rethrow them.
 
-Calling getopt.parse() an throw exceptions if the user has given bad options
+Calling yanop.parse() an throw exceptions if the user has given bad options
 on the command line. These are generally the ones you want to try to catch and
-print. They are all instances of getopt.ParseError.
+print. They are all instances of yanop.ParseError.
 
-I think getopt should behave differently.
+I think yanop should behave differently.
 =========================================
 
 I value your opinion, I really do. I also have a job, and it isn't maintaining
-getopt. Please, please either include a patch in your correspondance or send
+yanop. Please, please either include a patch in your correspondance or send
 me a pull request on github. Otherwise, your issue may or may not be
 addressed, but I'm gonna go out on a limb and say it probably won't be. Thanks
 in advance for your contributions :)

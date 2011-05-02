@@ -1,4 +1,4 @@
-getopt = require '../lib/getopt'
+yanop = require '../lib/yanop'
 
 expected = '''
                 -v
@@ -24,29 +24,29 @@ exports.basic = (t) ->
     t.expect 1
     spec =
         verbose:
-            type: getopt.flag
+            type: yanop.flag
             short: 'v'
             description: 'Print debugging messages'
         output:
-            type: getopt.scalar
+            type: yanop.scalar
             short: 'o'
             description: 'Filename (- for stdout) to write output to.'
             default: '-'
         input:
-            type: getopt.list
+            type: yanop.list
             short: 'i'
             description: 'Filename(s) (- for stdin) to read input from'
             default: ['-']
         password:
-            type: getopt.scalar
+            type: yanop.scalar
             description: 'Secret string to use when connecting to server. This description is going to be ridiculously long so that we can test the line breaking a bit'
             required: true
         symbols:
-            type: getopt.hash
+            type: yanop.hash
             short: 'D',
             long: 'define'
             description: 'Symbols to define during processing'
-    u = new getopt.Help spec
+    u = new yanop.Help spec
     console.log(u.toString())
     t.equals u.toString(), expected
     t.done()
