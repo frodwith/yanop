@@ -9,13 +9,16 @@ my @MANIFEST = qw(
     package.json
 );
 
-find {
-    no_chdir => 1,
-    wanted   => sub {
-        next if /\.git/;
-        push @MANIFEST, $_ if /\.js$/;
-    }
-}, '.';
+sub add_manifest {
+    my $re = shift;
+    find {
+        no_chdir => 1,
+        wanted   => sub { push @MANIFEST, $_ if $_ =~ $re }
+    }, $_ for @_;
+}
+
+add_manifest qr/\.js$/, qw(lib test);
+add_manifest qr/\.coffee$/, 'examples';
 
 my $version = do {
     open my $pkg, '<', 'package.json';

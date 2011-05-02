@@ -1,7 +1,7 @@
 %.js : %.coffee
 	coffee -cs < $< > $@
 
-JSFILES := $(shell find . -name '*.coffee' | sed s/\.coffee$$/.js/)
+JSFILES := $(shell find lib test -name '*.coffee' | sed s/\.coffee$$/.js/)
 coffee: $(JSFILES)
 
 all: coffee
@@ -10,7 +10,7 @@ test: coffee
 	nodeunit test/*.js
 
 clean:
-	rm -f $(JSFILES)
+	rm -f $(JSFILES) yanop*.tar.gz
 
 dist:
 	perl mkdist.pl
