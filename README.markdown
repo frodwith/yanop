@@ -59,7 +59,7 @@ Why?
 
 As if Node didn't have enough option parsers. As of this writing, most of them
 are almost good enough for me. None of them quite measures up to the power of
-perl's yanop::Long though. yanop::Long's interface sucks, but its parser is
+perl's Getopt::Long though. Getopt::Long's interface sucks, but its parser is
 very flexible. This module aims to have an interface that doesn't suck and
 still be flexible, but you'll be the judge.
 
