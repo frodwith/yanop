@@ -2,17 +2,21 @@
 	coffee -cs < $< > $@
 
 JSFILES := $(shell find lib test -name '*.coffee' | sed s/\.coffee$$/.js/)
+
 coffee: $(JSFILES)
 
 all: coffee
 
 test: coffee
-	nodeunit test/*.js
+	npm test
 
 clean:
-	rm -f $(JSFILES) yanop*.tar.gz
+	rm -rf $(JSFILES) yanop*.tar.gz node_modules
+
+deps:
+	npm install
 
 dist:
 	perl mkdist.pl
 
-.PHONY : all test coffee dist
+.PHONY : all test coffee dist deps

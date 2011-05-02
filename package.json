@@ -9,6 +9,15 @@
         "lib" : "./lib",
         "test" : "./test"
     },
+    "dependencies" : {
+        "file" : ">=0.1.1"
+    },
+    "devDependencies" : {
+        "nodeunit" : ">=0.5.1"
+    },
+    "scripts" : {
+        "test": "nodeunit test/*.js"
+    },
     "maintainers" : [
         { "name": "Paul Driver", "email": "frodwith@gmail.com" }
     ],

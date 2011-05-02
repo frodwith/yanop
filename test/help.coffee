@@ -47,6 +47,5 @@ exports.basic = (t) ->
             long: 'define'
             description: 'Symbols to define during processing'
     u = new yanop.Help spec
-    console.log(u.toString())
     t.equals u.toString(), expected
     t.done()
