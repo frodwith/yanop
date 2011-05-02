@@ -202,17 +202,17 @@ spec information in the description.
 
 ### yanop.simple(spec, banner, argv)
 
-Behaves similarly to yanop.tryParse(), except that it adds a "help" option
-and then checks for it. If --help is passed, spec will be passed to
-yanop.help() to generate some the help. The given banner will be printed,
-followed by this help. Banner and argv are both optional: banner defaults to
-yanop.usage(), and argv() defaults to process.argv as in yanop.parse().
+Behaves similarly to yanop.tryParse(), except that it adds a "help" option and
+then checks for it. If --help is passed, spec will be passed to yanop.help()
+to generate the help. The given banner will be printed, followed by this help.
+Banner and argv are both optional: banner defaults to yanop.usage(), and argv
+defaults to process.argv as in yanop.parse().
 
 Errors
 ======
 There is a whole heirarchy of error classes, mostly for testing purposes. If
-you don't catch them, node will print a stacktrace for them like the common
-errors. If you do, you can use their "message" member to print out something
+you don't catch them, node will print a stacktrace for them like builtin
+Errors.  If you do, you can use their "message" member to print out something
 useful to the user.
 
 Any time you create a Parser or Help object (internal classes used by the api
@@ -221,7 +221,7 @@ about your option specification. This helps you catch errors sooner. These
 exceptions are instances of yanop.SpecError, but you probably shouldn't try
 to catch them. yanop.tryParse et al will rethrow them.
 
-Calling yanop.parse() an throw exceptions if the user has given bad options
+Calling yanop.parse() will throw exceptions if the user has given bad options
 on the command line. These are generally the ones you want to try to catch and
 print. They are all instances of yanop.ParseError.
 
