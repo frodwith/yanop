@@ -16,7 +16,7 @@ clean:
 deps:
 	npm install
 
-dist:
+dist: coffee
 	perl mkdist.pl
 
 .PHONY : all test coffee dist deps

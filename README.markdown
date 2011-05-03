@@ -210,12 +210,12 @@ defaults to process.argv as in yanop.parse().
 
 Errors
 ======
-There is a whole heirarchy of error classes, mostly for testing purposes. If
-you don't catch them, node will print a stacktrace for them like builtin
+There is a whole hierarchy of error classes, mostly for testing purposes. If
+you don't catch them, node will print a stack trace for them like builtin
 Errors.  If you do, you can use their "message" member to print out something
 useful to the user.
 
-Any time you create a Parser or Help object (internal classes used by the api
+Any time you create a Parser or Help object (internal classes used by the API
 methods above), an exception will be thrown if there is something inconsistent
 about your option specification. This helps you catch errors sooner. These
 exceptions are instances of yanop.SpecError, but you probably shouldn't try
@@ -229,7 +229,7 @@ I think yanop should behave differently.
 =========================================
 
 I value your opinion, I really do. I also have a job, and it isn't maintaining
-yanop. Please, please either include a patch in your correspondance or send
+yanop. Please, please either include a patch in your correspondence or send
 me a pull request on github. Otherwise, your issue may or may not be
 addressed, but I'm gonna go out on a limb and say it probably won't be. Thanks
 in advance for your contributions :)
