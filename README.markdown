@@ -163,6 +163,32 @@ Unrecognized Arguments
 Any options given to the program that aren't specified in the options spec
 will cause an error to be thrown.
 
+The Result Object
+=================
+
+The return value of most of the API methods is a result object. Mostly you can
+just treat it like a hash of your options, but it has a couple of special
+properties:
+
+### result.argv
+
+All the remaining positional arguments after processing.
+
+### result.values
+
+This really is a hash of your options.
+
+### result.given
+
+This is a hash of the options specified on the command line, e.g. before any
+defaults were set.
+
+## result[targetName]
+
+This will be the same as result.values[targetName] unless targetName conflicts
+with one of the above keys, in which case you must use result.values to get at
+it (an edge case that you probably don't have to worry about).
+
 API
 ===
 

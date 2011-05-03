@@ -1,7 +1,7 @@
 {
     "name" : "yanop",
     "description" : "Yet Another Node Option Parser",
-    "version" : "0.1.0",
+    "version" : "0.1.1",
     "bugs" : "https://github.com/frodwith/yanop/issues",
     "keywords" : [ "option", "parse", "commandline", "command", "line" ],
     "main" : "./lib/yanop.js",
