@@ -36,8 +36,9 @@ exports.Help = class Help
             line.last  = left[left.length-1]
 
             right = []
-            if desc = sub.description.trim().replace(/\.$/, '')
-                right.push desc
+            desc = sub.description
+            desc and= desc.trim().replace(/\.$/, '')
+            right.push(desc) if desc
 
             right.push 'Required' if sub.required
             if sub.type is type.array or sub.type is type.object
