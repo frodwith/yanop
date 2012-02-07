@@ -10,10 +10,12 @@
         "test" : "./test"
     },
     "dependencies" : {
-        "file" : ">=0.1.1"
     },
     "devDependencies" : {
         "nodeunit" : ">=0.5.1"
+    },
+    "engines" : {
+        "node" : ">=0.6.0"
     },
     "scripts" : {
         "test": "nodeunit test/*.js"
