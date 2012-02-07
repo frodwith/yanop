@@ -1,4 +1,3 @@
-file = require 'file'
 path = require 'path'
 
 reexport = (module) ->
@@ -19,7 +18,7 @@ exports.parse = (spec, argv) ->
 
 exports.zero = () ->
     abs    = path.normalize process.argv[1]
-    rel    = file.path.relativePath process.cwd(), abs
+    rel    = path.relative process.cwd(), abs
     script = if rel.length < abs.length then rel else abs
     "#{ process.argv[0] } #{ script }"
 
